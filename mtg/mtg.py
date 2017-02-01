@@ -115,20 +115,20 @@ class MTG:
 				new_im.save("data/mtg/generated/" + mana_cost + ".png")
 			return generated
 			
-	async def _card_search(self, card):
+	async def _card_search(self, query):
 		cards = []
 		match = False
 		for card in self.cards:
 			name = card['name']
 			print (name)
-			x = difflib.SequenceMatcher(None, name.lower(), card.lower()).ratio()
+			x = difflib.SequenceMatcher(None, name.lower(), query.lower()).ratio()
 			if x > 0.92:
 				match = card
-			elif card.lower() in name.lower():
+			elif query.lower() in name.lower():
 				if len(cards) > 10:
 					break
 				cards.append(card)
-			if card.lower() == name.lower():
+			if query.lower() == name.lower():
 				match = card
 				break
 		return match, cards
