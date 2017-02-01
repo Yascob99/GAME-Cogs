@@ -38,7 +38,7 @@ class MTG:
 					data['cards'].append(item)
 			session.close()
 			page += 1
-			self._robust_edit(msg, base_msg + status)
+			msg = await self._robust_edit(msg, base_msg + status)
 		print (data)
 		self.cards = data
 		dataIO.save_json('data/steam/cards.json', data)
