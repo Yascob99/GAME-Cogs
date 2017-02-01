@@ -59,7 +59,7 @@ class MTG:
 			em.set_footer(icon_url= self._generate_set_symbols(match['sets']))
 			await self.bot.say(embed=em)
 		elif cards:
-			message = '```This game was not found. But I found close matches:\n\n'
+			message = '```a card called "'+ card + '" was not found. But I found close matches:\n\n'
 			for card in cards:
 				message += '{}\n'.format(card['name'])
 			message += '```'
