@@ -32,7 +32,7 @@ class MTG:
 				if temp['cards'] == []:
 					break
 				for item in list(temp['cards']):
-					data = data['cards'].append(item)
+					data['cards'].append(item)
 			page += 1
 		print (data)
 		self.cards = data
