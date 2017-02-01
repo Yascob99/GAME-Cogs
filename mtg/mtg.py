@@ -69,7 +69,6 @@ class MTG:
 		if match:
 			em = discord.Embed(title='{}'.format(match['name']), color=discord.Color.blue())
 			em.set_image(url=match['imageUrl'])
-			print(await self._generate_mana_cost(match['manaCost']))
 			em.set_thumbnail(url= await self._generate_mana_cost(match['manaCost']))
 			#em.set_footer(icon_url= await self._generate_set_symbols(match['sets']))
 			await self.bot.say(embed=em)
@@ -87,6 +86,7 @@ class MTG:
 		generated = "data/mtg/generated/" + mana_cost + ".png"
 		if not os.path.isfile(generated):
 			cost = mana_cost.replace("{", "").rstrip("}").split("}")
+			print (cost)
 			ncost = []
 			for part in cost:
 				part = "data/mtg/mana/" + part + ".png"
