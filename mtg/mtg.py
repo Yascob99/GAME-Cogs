@@ -146,6 +146,9 @@ class MTG:
 			if query.lower() == name.lower():
 				match = card
 				break
+		if len(cards) == 1:
+			match = cards[0]
+			cards = []
 		return match, cards
 
 
