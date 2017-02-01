@@ -87,10 +87,10 @@ class MTG:
 		if not os.path.isfile(generated):
 			cost = mana_cost.replace("{", "").rstrip("}").split("}")
 			print (cost)
-			ncost = []
+			images = []
 			for part in cost:
 				part = Image.open("data/mtg/mana/" + part + ".png")
-				ncost.append(part)
+				images.append(part)
 			w = sum(i.size[0] for i in images)
 			mh = 600
 
