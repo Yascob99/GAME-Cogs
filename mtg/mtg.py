@@ -94,11 +94,11 @@ class MTG:
 		return generated
 		
 	async def _generate_set_symbols(self, sets):
-		generated = "data/mtg/generated/" + mana_cost + ".png"
+		generated = "data/mtg/generated/" + "_".join(sets) + ".png"
 		if not os.path.isfile(generated):
 			nset = []
 			for set in sets:
-				set = "data/mtg/sets/" + set + ".png"
+				set = "data/mtg/sets/" + set + "_symbol.png"
 				nset.append(set)
 				images = map(Image.open, nset)
 				widths, heights = zip(*(i.size for i in images))
@@ -113,7 +113,7 @@ class MTG:
 					new_im.paste(im, (x_offset,0))
 					x_offset += im.size[0]
 
-				new_im.save("data/mtg/generated/" + mana_cost + ".png")
+				new_im.save("data/mtg/generated/" + "_".join(sets) + ".png")
 			return generated
 			
 	async def _card_search(self, query):
