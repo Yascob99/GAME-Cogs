@@ -37,9 +37,9 @@ class MTG:
 		elif cards:
 			message = '```This game was not found. But I found close matches:\n\n'
 			await self.bot.say(message)
-			else:
-				message = '`This game could not be found`'
-				await self.bot.say(message)
+		else:
+			message = '`This game could not be found`'
+			await self.bot.say(message)
 
 	async def _generate_mana_cost(self, mana_cost):
 		generated = "data/mtg/generated" + mana_cost + ".png"
