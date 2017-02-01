@@ -93,7 +93,7 @@ class MTG:
 				ncost.append(part)
 			images = map(Image.open, ncost)
 			w = sum(i.size[0] for i in images)
-			mh = max(i.size[1] for i in images)
+			mh = 600
 
 			result = Image.new("RGBA", (w, mh))
 
