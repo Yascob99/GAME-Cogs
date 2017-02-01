@@ -15,6 +15,21 @@ class MTG:
 	def __init__(self, bot):
 		self.bot = bot
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
+		
+	async def _update_sets(self):
+		url = "https://api.magicthegathering.io/v1/sets"
+		conn = aiohttp.TCPConnector(verify_ssl=False)
+		session = aiohttp.ClientSession(connector=conn)
+		headers = {'user-agent': 'Red-cog/1.0'}
+		data = {'sets':[]}
+		base_msg = "Downloading updated sets data, please wait...\n"
+		async with session.get(url ,headers=headers) as r:
+			data = await r.json()
+		sets = []
+		session.close()
+		for set in data:
+			set.append(set['code'])
+		
 
 	async def _update_cards(self):
 		payload = {}
@@ -31,7 +46,6 @@ class MTG:
 		while True:
 			payload['page'] = page
 			async with session.get(url, params=payload ,headers=headers) as r:
-				print (await r.text())
 				temp = await r.json()
 				if temp['cards'] == []:
 					break
