@@ -117,15 +117,15 @@ class MTG:
         bot.add_cog(cog)
 
     def check_file():
-    data = {}
-    data['cards'] = {}
-    f = 'data/mtg/cards.json'
-    if not dataIO.is_valid_json(f):
-        print('Creating default cards.json...')
-        dataIO.save_json(f, data)
+		data = {}
+		data['cards'] = {}
+		f = 'data/mtg/cards.json'
+		if not dataIO.is_valid_json(f):
+			print('Creating default cards.json...')
+			dataIO.save_json(f, data)
 
     def setup(bot):
-    check_folder()
-    check_file()
-    cog = MTG(bot)
-    bot.add_cog(cog)
+		check_folder()
+		check_file()
+		cog = MTG(bot)
+		bot.add_cog(cog)
