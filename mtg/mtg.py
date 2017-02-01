@@ -1,3 +1,13 @@
+import os
+import html
+import discord
+from discord.ext import commands
+from cogs.utils.dataIO import dataIO
+from mtgsdk import Card
+import difflib
+import sys
+from PIL import Image
+
 class MTG:
 """Fetch info about a MTG card"""
 
@@ -107,15 +117,15 @@ class MTG:
         bot.add_cog(cog)
 
     def check_file():
-		data = {}
-		data['cards'] = {}
-		f = 'data/mtg/cards.json'
-		if not dataIO.is_valid_json(f):
-			print('Creating default cards.json...')
-			dataIO.save_json(f, data)
+    data = {}
+    data['cards'] = {}
+    f = 'data/mtg/cards.json'
+    if not dataIO.is_valid_json(f):
+        print('Creating default cards.json...')
+        dataIO.save_json(f, data)
 
     def setup(bot):
-		check_folder()
-		check_file()
-		cog = MTG(bot)
-		bot.add_cog(cog)
+    check_folder()
+    check_file()
+    cog = MTG(bot)
+    bot.add_cog(cog)
