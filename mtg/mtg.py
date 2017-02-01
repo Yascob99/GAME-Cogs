@@ -69,19 +69,19 @@ class MTG:
     async def _card_search(self, card):
         cards = []
         match = False
-            for card in self.cards:
-                name = card['name']
-                x = difflib.SequenceMatcher(None, name.lower(), game.lower()).ratio()
-                if x > 0.92:
-                    match = card
-                elif card.lower() in name.lower():
-                    if len(games) > 10:
-                        break
-                    cards.append(card)
-                if card.lower() == name.lower():
-                    match = card
-                    break
-            return match, cards
+		for card in self.cards:
+			name = card['name']
+			x = difflib.SequenceMatcher(None, name.lower(), game.lower()).ratio()
+			if x > 0.92:
+				match = card
+			elif card.lower() in name.lower():
+				if len(games) > 10:
+					break
+				cards.append(card)
+			if card.lower() == name.lower():
+				match = card
+				break
+		return match, cards
 
 
     @commands.command(no_pm=True, name='MTGUpdate', aliases=['MTGU', 'mtgu', "MtgU", "Mtgu"])
