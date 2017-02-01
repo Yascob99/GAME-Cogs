@@ -92,20 +92,18 @@ class MTG:
 				part = "data/mtg/mana/" + part + ".png"
 				ncost.append(part)
 			images = map(Image.open, ncost)
-			print (images)
-			widths, heights = zip(*(i.size for i in images))
+			w = sum(i.size[0] for i in images)
+			mh = max(i.size[1] for i in images)
 
-			total_width = sum(widths)
-			max_height = max(heights)
+			result = Image.new("RGBA", (w, mh))
 
-			new_im = Image.new('RGB', (total_width, max_height))
+			x = 0
+			for i in images:
+				result.paste(i, (x, 0))
+				x += i.size[0]
 
-			x_offset = 0
-			for im in images:
-				new_im.paste(im, (x_offset,0))
-				x_offset += im.size[0]
-
-			new_im.save("data/mtg/generated/" + mana_cost + ".png")
+			result.save("data/mtg/generated/" + mana_cost + ".png")
+			
 		return generated
 		
 	async def _generate_set_symbols(self, sets):
