@@ -25,7 +25,7 @@ class MTG:
 		headers = {'user-agent': 'Red-cog/1.0'}
 		data = {'cards':[]}
 		base_msg = "Downloading updated card data, please wait...\n"
-		status = ' %d/? pages updated' % (str(page - 1))
+		status = ' %d/? pages updated' % (page - 1)
 		msg = await self.bot.say(base_msg + status)
 		temp = ""
 		while True:
