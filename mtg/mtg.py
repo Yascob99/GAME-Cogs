@@ -94,7 +94,7 @@ class MTG:
 			w = sum(i.size[0] for i in images) + 20 * (len(images) - 1)
 			mh = 600
 
-			result = Image.new("RGBA", (w, mh))
+			result = Image.new("RGBA", (w, mh), (255,255,255))
 
 			x = 0
 			for i in images:
