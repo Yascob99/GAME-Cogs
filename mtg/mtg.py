@@ -118,15 +118,15 @@ class MTG:
 			message = 'Could not update. Check console for more information.'
 			print(error)
 		await self.bot.say(message)
-		
+	
 	async def _robust_edit(self, msg, text):
-        try:
-            msg = await self.bot.edit_message(msg, text)
-        except discord.errors.NotFound:
-            msg = await self.bot.send_message(msg.channel, text)
-        except:
-            raise
-        return msg
+		try:
+			msg = await self.bot.edit_message(msg, text)
+		except discord.errors.NotFound:
+			msg = await self.bot.send_message(msg.channel, text)
+		except:
+			raise
+		return msg
 
 
 def check_folder():
