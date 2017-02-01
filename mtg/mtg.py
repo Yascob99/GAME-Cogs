@@ -28,7 +28,7 @@ class MTG:
 		card = "_".join(card)
 		card_match = await self._card_search(card)
 		match = game_match[0]
-			games = game_match[1]
+		games = game_match[1]
 		if match:
 			em = discord.Embed(title='{}'.format(match['name']), color=discord.Color.blue())
 			em.set_image(url=match['imageUrl'])
@@ -70,11 +70,11 @@ class MTG:
 		match = False
 		for card in self.cards:
 			name = card['name']
-			x = difflib.SequenceMatcher(None, name.lower(), game.lower()).ratio()
+			x = difflib.SequenceMatcher(None, name.lower(), card.lower()).ratio()
 			if x > 0.92:
 				match = card
 			elif card.lower() in name.lower():
-				if len(games) > 10:
+				if len(cards) > 10:
 					break
 				cards.append(card)
 			if card.lower() == name.lower():
