@@ -62,7 +62,10 @@ class MTG:
 	@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
 	async def _MTG(self, ctx, *card: str):
 		"""Searches for named MTG Card"""
-		card = '"' + " ".join(card) + '"'
+		if len(card) > 1:
+			card = '"' + " ".join(card) + '"'
+		else:
+			card = card[0]
 		card_match = await self._card_search(card)
 		match = card_match[0]
 		cards = card_match[1]
@@ -73,13 +76,13 @@ class MTG:
 			#em.set_footer(icon_url= await self._generate_set_symbols(match['sets']))
 			await self.bot.say(embed=em)
 		elif cards:
-			message = '```A card called "'+ card + '" was not found. But I found close matches:\n\n'
+			message = '```A card called '+ card + ' was not found. But I found close matches:\n\n'
 			for card in cards:
 				message += '{}\n'.format(card['name'])
 			message += '```'
 			await self.bot.say(message)
 		else:
-			message = '`A card called "'+ card + '" was not found.`'
+			message = '`A card called '+ card + ' was not found.`'
 			await self.bot.say(message)
 
 	async def _generate_mana_cost(self, mana_cost):
