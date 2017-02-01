@@ -89,9 +89,8 @@ class MTG:
 			print (cost)
 			ncost = []
 			for part in cost:
-				part = "data/mtg/mana/" + part + ".png"
+				part = Image.open("data/mtg/mana/" + part + ".png")
 				ncost.append(part)
-			images = map(Image.open, ncost)
 			w = sum(i.size[0] for i in images)
 			mh = 600
 
