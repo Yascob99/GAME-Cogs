@@ -59,7 +59,7 @@ class MTG:
 			em.set_footer(icon_url= self._generate_set_symbols(match['sets']))
 			await self.bot.say(embed=em)
 		elif cards:
-			message = '```a card called "'+ card + '" was not found. But I found close matches:\n\n'
+			message = '```A card called "'+ card + '" was not found. But I found close matches:\n\n'
 			for card in cards:
 				message += '{}\n'.format(card['name'])
 			message += '```'
@@ -120,7 +120,6 @@ class MTG:
 		match = False
 		for card in self.cards:
 			name = card['name']
-			print (name)
 			x = difflib.SequenceMatcher(None, name.lower(), query.lower()).ratio()
 			if x > 0.92:
 				match = card
