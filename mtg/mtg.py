@@ -31,6 +31,7 @@ class MTG:
 		while True:
 			payload['page'] = page
 			async with session.get(url, params=payload ,headers=headers) as r:
+				print (await r.text())
 				temp = await r.json()
 				if temp['cards'] == []:
 					break
@@ -56,6 +57,7 @@ class MTG:
 			em = discord.Embed(title='{}'.format(match['name']), color=discord.Color.blue())
 			em.set_image(url=match['imageUrl'])
 			em.set_thumbnail(self._generate_mana_cost(match['manaCost']))
+			em.set_footer(icon_url= self._generate_set_symbols(match['sets']))
 			await self.bot.say(embed=em)
 		elif cards:
 			message = '```This game was not found. But I found close matches:\n\n'
@@ -68,12 +70,12 @@ class MTG:
 			await self.bot.say(message)
 
 	async def _generate_mana_cost(self, mana_cost):
-		generated = "data/mtg/generated" + mana_cost + ".png"
+		generated = "data/mtg/generated/" + mana_cost + ".png"
 		if not os.path.isfile(generated):
 			cost = mana_cost.replace("{", "").rstrip("}").split("}")
 			ncost = []
 			for part in cost:
-				part = "data/mtg/images" + part + ".png"
+				part = "data/mtg/mana/" + part + ".png"
 				ncost.append(part)
 			images = map(Image.open, ncost)
 			widths, heights = zip(*(i.size for i in images))
@@ -88,9 +90,32 @@ class MTG:
 				new_im.paste(im, (x_offset,0))
 				x_offset += im.size[0]
 
-			new_im.save("data/mtg/generated" + mana_cost + ".png")
+			new_im.save("data/mtg/generated/" + mana_cost + ".png")
 		return generated
+		
+	async def _generate_set_symbols(self, sets):
+		generated = "data/mtg/generated/" + mana_cost + ".png"
+		if not os.path.isfile(generated):
+			nset = []
+			for set in sets:
+				set = "data/mtg/sets/" + set + ".png"
+				nset.append(set)
+				images = map(Image.open, nset)
+				widths, heights = zip(*(i.size for i in images))
 
+				total_width = sum(widths)
+				max_height = max(heights)
+
+				new_im = Image.new('RGB', (total_width, max_height))
+
+				x_offset = 0
+				for im in images:
+					new_im.paste(im, (x_offset,0))
+					x_offset += im.size[0]
+
+				new_im.save("data/mtg/generated/" + mana_cost + ".png")
+			return generated
+			
 	async def _card_search(self, card):
 		cards = []
 		match = False
