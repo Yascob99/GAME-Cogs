@@ -95,37 +95,23 @@ class MTG:
 		await self.bot.say(message)
 
 
-	def check_folder():
-		if not os.path.exists('data/mtg/images'):
-			print('Creating data/mtg folder...')
-			os.makedirs('data/mtg/images')
-		if not os.path.exists('data/mtg/generated'):
-			os.makedirs('data/mtg/generated')
+def check_folder():
+	if not os.path.exists('data/mtg/images'):
+		print('Creating data/mtg folder...')
+		os.makedirs('data/mtg/images')
+	if not os.path.exists('data/mtg/generated'):
+		os.makedirs('data/mtg/generated')
 
-	def check_file():
-		data = {}
-		data['cards'] = {}
-		f = 'data/mtg/cards.json'
-		if not dataIO.is_valid_json(f):
-			print('Creating default cards.json...')
-			dataIO.save_json(f, data)
+def check_file():
+	data = {}
+	data['cards'] = {}
+	f = 'data/mtg/cards.json'
+	if not dataIO.is_valid_json(f):
+		print('Creating default cards.json...')
+		dataIO.save_json(f, data)
 
-	def setup(bot):
-		check_folder()
-		check_file()
-		cog = MTG(bot)
-		bot.add_cog(cog)
-
-	def check_file():
-		data = {}
-		data['cards'] = {}
-		f = 'data/mtg/cards.json'
-		if not dataIO.is_valid_json(f):
-			print('Creating default cards.json...')
-			dataIO.save_json(f, data)
-
-	def setup(bot):
-		check_folder()
-		check_file()
-		cog = MTG(bot)
-		bot.add_cog(cog)
+def setup(bot):
+	check_folder()
+	check_file()
+	cog = MTG(bot)
+	bot.add_cog(cog)
