@@ -36,9 +36,9 @@ class MTG:
 					break
 				for item in list(temp['cards']):
 					data['cards'].append(item)
-			session.close()
 			page += 1
 			msg = await self._robust_edit(msg, base_msg + status)
+		session.close()
 		print (data)
 		self.cards = data
 		dataIO.save_json('data/steam/cards.json', data)
