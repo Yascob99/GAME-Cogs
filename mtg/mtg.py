@@ -90,6 +90,7 @@ class MTG:
 			ncost = []
 			for part in cost:
 				part = "data/mtg/mana/" + part + ".png"
+				print (part)
 				ncost.append(part)
 			images = map(Image.open, ncost)
 			widths, heights = zip(*(i.size for i in images))
