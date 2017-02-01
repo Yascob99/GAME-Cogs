@@ -55,8 +55,8 @@ class MTG:
 		if match:
 			em = discord.Embed(title='{}'.format(match['name']), color=discord.Color.blue())
 			em.set_image(url=match['imageUrl'])
-			print(self._generate_mana_cost(match['manaCost']))
-			em.set_thumbnail(self._generate_mana_cost(match['manaCost']))
+			print(await self._generate_mana_cost(match['manaCost']))
+			em.set_thumbnail(await self._generate_mana_cost(match['manaCost']))
 			em.set_footer(icon_url= self._generate_set_symbols(match['sets']))
 			await self.bot.say(embed=em)
 		elif cards:
