@@ -62,7 +62,7 @@ class MTG:
 	@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
 	async def _MTG(self, ctx, *card: str):
 		"""Searches for named MTG Card"""
-		card = '"' + card + '"'
+		card = '"' + " ".join(card) + '"'
 		card_match = await self._card_search(card)
 		match = card_match[0]
 		cards = card_match[1]
