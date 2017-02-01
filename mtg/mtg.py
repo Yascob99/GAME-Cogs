@@ -26,6 +26,7 @@ class MTG:
 		data = {'cards':[]}
 		while True:
 			payload['page'] = page
+			print (page)
 			async with session.get(url, params=payload ,headers=headers) as r:
 				temp = await r.json()
 				if temp['cards'] == []:
