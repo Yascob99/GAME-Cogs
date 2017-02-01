@@ -156,11 +156,13 @@ class MTG:
 
 
 def check_folder():
-	if not os.path.exists('data/mtg/images'):
+	if not os.path.exists('data/mtg/mana'):
 		print('Creating data/mtg folder...')
-		os.makedirs('data/mtg/images')
+		os.makedirs('data/mtg/mana')
 	if not os.path.exists('data/mtg/generated'):
 		os.makedirs('data/mtg/generated')
+	if not os.path.exists('data/mtg/sets'):
+		os.makedirs('data/mtg/sets')
 
 def check_file():
 	data = {}
