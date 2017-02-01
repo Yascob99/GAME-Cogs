@@ -37,6 +37,7 @@ class MTG:
 				for item in list(temp['cards']):
 					data['cards'].append(item)
 			page += 1
+			status = ' %d/? pages updated' % (page - 1)
 			msg = await self._robust_edit(msg, base_msg + status)
 		session.close()
 		print (data)
