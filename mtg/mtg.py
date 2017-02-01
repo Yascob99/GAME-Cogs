@@ -27,14 +27,14 @@ class MTG:
 		temp = ""
 		while True:
 			payload['page'] = page
-			print (list(temp['cards']))
 			async with session.get(url, params=payload ,headers=headers) as r:
 				temp = await r.json()
 				if temp['cards'] == []:
 					break
 				for item in list(temp['cards']):
-					data['cards'].append(item)
+					data = data['cards'].append(item)
 			page += 1
+		print (data)
 		self.cards = data
 		dataIO.save_json('data/steam/cards.json', data)
 
