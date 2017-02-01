@@ -26,8 +26,8 @@ class MTG:
 		"""Searches for named MTG Card"""
 		card = "_".join(card)
 		card_match = await self._card_search(card)
-		match = game_match[0]
-		games = game_match[1]
+		match = card_match[0]
+		cards = card_match[1]
 		if match:
 			em = discord.Embed(title='{}'.format(match['name']), color=discord.Color.blue())
 			em.set_image(url=match['imageUrl'])
@@ -35,6 +35,9 @@ class MTG:
 			await self.bot.say(embed=em)
 		elif cards:
 			message = '```This game was not found. But I found close matches:\n\n'
+			for card in cards:
+                message += '{}\n'.format(card['name'])
+            message += '```'
 			await self.bot.say(message)
 		else:
 			message = '`This game could not be found`'
