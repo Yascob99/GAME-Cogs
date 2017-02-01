@@ -24,6 +24,9 @@ class MTG:
 		session = aiohttp.ClientSession(connector=conn)
 		headers = {'user-agent': 'Red-cog/1.0'}
 		data = {'cards':[]}
+		base_msg = "Downloading updated card data, please wait...\n"
+		status = ' %d/? pages updated' % (str(page - 1))
+		msg = await self.bot.say(base_msg + status)
 		temp = ""
 		while True:
 			payload['page'] = page
@@ -33,7 +36,9 @@ class MTG:
 					break
 				for item in list(temp['cards']):
 					data['cards'].append(item)
+			session.close()
 			page += 1
+			self._robust_edit(msg, base_msg + status)
 		print (data)
 		self.cards = data
 		dataIO.save_json('data/steam/cards.json', data)
@@ -113,6 +118,15 @@ class MTG:
 			message = 'Could not update. Check console for more information.'
 			print(error)
 		await self.bot.say(message)
+		
+	async def _robust_edit(self, msg, text):
+        try:
+            msg = await self.bot.edit_message(msg, text)
+        except discord.errors.NotFound:
+            msg = await self.bot.send_message(msg.channel, text)
+        except:
+            raise
+        return msg
 
 
 def check_folder():
