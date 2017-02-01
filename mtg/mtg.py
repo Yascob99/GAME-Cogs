@@ -24,9 +24,11 @@ class MTG:
 		session = aiohttp.ClientSession(connector=conn)
 		headers = {'user-agent': 'Red-cog/1.0'}
 		data = {'cards':[]}
+		temp = ""
 		while True:
 			payload['page'] = page
 			print (page)
+			print (temp)
 			async with session.get(url, params=payload ,headers=headers) as r:
 				temp = await r.json()
 				if temp['cards'] == []:
