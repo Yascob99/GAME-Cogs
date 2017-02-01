@@ -120,6 +120,7 @@ class MTG:
 		match = False
 		for card in self.cards:
 			name = card['name']
+			print (name)
 			x = difflib.SequenceMatcher(None, name.lower(), card.lower()).ratio()
 			if x > 0.92:
 				match = card
