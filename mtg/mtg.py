@@ -62,7 +62,7 @@ class MTG:
 	@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
 	async def _MTG(self, ctx, *card: str):
 		"""Searches for named MTG Card"""
-		card = "_".join(card)
+		card = '"' + card + '"'
 		card_match = await self._card_search(card)
 		match = card_match[0]
 		cards = card_match[1]
@@ -79,7 +79,7 @@ class MTG:
 			message += '```'
 			await self.bot.say(message)
 		else:
-			message = '`This game could not be found`'
+			message = '`A card called "'+ card + '" was not found.`'
 			await self.bot.say(message)
 
 	async def _generate_mana_cost(self, mana_cost):
