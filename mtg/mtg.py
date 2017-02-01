@@ -9,7 +9,7 @@ import sys
 from PIL import Image
 
 class MTG:
-"""Fetch info about a MTG card"""
+	"""Fetch info about a MTG card"""
 
     def __init__(self, bot):
         self.bot = bot
