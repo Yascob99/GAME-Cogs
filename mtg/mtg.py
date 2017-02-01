@@ -36,8 +36,8 @@ class MTG:
 		elif cards:
 			message = '```This game was not found. But I found close matches:\n\n'
 			for card in cards:
-                message += '{}\n'.format(card['name'])
-            message += '```'
+				message += '{}\n'.format(card['name'])
+			message += '```'
 			await self.bot.say(message)
 		else:
 			message = '`This game could not be found`'
