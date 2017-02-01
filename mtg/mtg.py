@@ -11,12 +11,12 @@ from PIL import Image
 class MTG:
 	"""Fetch info about a MTG card"""
 
-    def __init__(self, bot):
+	def __init__(self, bot):
         self.bot = bot
         self._update()
         self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
 
-    async def _update_cards(self):
+	async def _update_cards(self):
         data = Card.all()
         self.cards = data
         dataIO.save_json('data/steam/games.json', data)
