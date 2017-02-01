@@ -6,6 +6,7 @@ from cogs.utils.dataIO import dataIO
 from mtgsdk import Card
 import difflib
 import sys
+import aiohttp
 from PIL import Image
 
 class MTG:
@@ -16,9 +17,24 @@ class MTG:
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
 
 	async def _update_cards(self):
-		data = Card.all()
+		payload = {}
+		url = "https://api.magicthegathering.io/v1/cards?"
+		page = 1
+		conn = aiohttp.TCPConnector(verify_ssl=False)
+		session = aiohttp.ClientSession(connector=conn)
+		headers = {'user-agent': 'Red-cog/1.0'}
+		data = {'cards':[]}
+		while True:
+			payload['page'] = page
+			async with session.get(url, params=payload ,headers=headers) as r:
+				temp = await r.json()
+				if temp['cards'] == []:
+					break
+				for item in list(temp['cards']):
+					data['cards'].append(item)
+			page += 1
 		self.cards = data
-		dataIO.save_json('data/steam/games.json', data)
+		dataIO.save_json('data/steam/cards.json', data)
 
 
 	@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
