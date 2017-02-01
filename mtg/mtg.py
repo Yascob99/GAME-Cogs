@@ -91,7 +91,7 @@ class MTG:
 			for part in cost:
 				part = Image.open("data/mtg/mana/" + part + ".png")
 				images.append(part)
-			w = sum(i.size[0] for i in images)
+			w = sum(i.size[0] for i in images) + 20 * (len(images) - 1)
 			mh = 600
 
 			result = Image.new("RGBA", (w, mh))
@@ -99,7 +99,7 @@ class MTG:
 			x = 0
 			for i in images:
 				result.paste(i, (x, 0))
-				x += i.size[0]
+				x += i.size[0] + 20
 
 			result.save("data/mtg/generated/" + mana_cost + ".png")
 			
