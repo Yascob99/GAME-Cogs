@@ -96,6 +96,7 @@ class MTG:
 		x = 0
 		for symbol in mana_symbols:
 			mana_symbols[x] = symbol.upper()
+			print (mana_symbols[x])
 			if not (mana_symbols[x] in self.symbols):
 				symbols.append(mana_symbols[x])
 			elif len(mana_symbols[x]) == 2 and mana_symbols[x][::-1] in self.symbols:
