@@ -17,7 +17,7 @@ class MTG:
 	def __init__(self, bot):
 		self.bot = bot
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
-		await _get_mana_symbols():
+		_get_mana_symbols():
 		
 	async def _get_mana_symbols():
 		payload = {}
