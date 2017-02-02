@@ -91,9 +91,14 @@ class MTG:
 	@commands.command(pass_context=True, no_pm=False, name='Mana', aliases=['mana'])
 	async def _mana(self, ctx ,*, mana):
 		"""Creates and outputs the given mana combo"""
-		mana_cost = "{" + "}{".join(mana.split(" ")) + "}"
+		mana_symbols = mana.split(" ")
+		x = 0
+		for symbol in mana_symbols:
+			mana_symbols[x] = symbol.upper()
+			x += 1	
+		mana_cost = "{" + "}{".join(mana_symbols) + "}"
 		image = await self._generate_mana_cost(mana_cost)
-		await self.bot.send_file(ctx.message.channel, open(image, "rb"), "")
+		await self.bot.send_file(ctx.message.channel, open(image, "rb"))
 		
 		
 		
