@@ -18,29 +18,6 @@ class MTG:
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
 		self._get_mana_symbols()
 		
-	def _get_mana_symbols(self):
-		payload = {}
-		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
-		url = "http://gatherer.wizards.com/Handlers/Image.ashx?"
-		conn = aiohttp.TCPConnector(verify_ssl=False)
-		session = aiohttp.ClientSession(connector=conn)
-		headers = {'user-agent': 'Red-cog/1.0'}
-		for symbol in list:
-			payload["name"] = symbol
-			payload["type"] = "symbol"
-			payload["size"] = "large"
-			resize = True
-			if "P" in symbol or "C" in symbol:
-				payload["size"] = "medium"
-			async with session.get(url ,params=payload,headers=headers) as r:
-				data = await r.read()
-				print(symbol)
-				stream = BytesIO(data)
-				img = Image.open(stream)
-				img = img.resize((25,25), Image.LANCZOS)
-				img.save("mtg/data/mtg/mana/" + symbol + ".png")
-	
-		session.close()
 		
 	async def _update_sets(self):
 		url = "https://api.magicthegathering.io/v1/sets"
@@ -216,8 +193,33 @@ def check_file():
 		print('Creating default cards.json...')
 		dataIO.save_json(f, data)
 		
+async def get_mana_symbols(self):
+		payload = {}
+		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
+		url = "http://gatherer.wizards.com/Handlers/Image.ashx?"
+		conn = aiohttp.TCPConnector(verify_ssl=False)
+		session = aiohttp.ClientSession(connector=conn)
+		headers = {'user-agent': 'Red-cog/1.0'}
+		for symbol in list:
+			payload["name"] = symbol
+			payload["type"] = "symbol"
+			payload["size"] = "large"
+			resize = True
+			if "P" in symbol or "C" in symbol:
+				payload["size"] = "medium"
+			async with session.get(url ,params=payload,headers=headers) as r:
+				data = await r.read()
+				print(symbol)
+				stream = BytesIO(data)
+				img = Image.open(stream)
+				img = img.resize((25,25), Image.LANCZOS)
+				img.save("mtg/data/mtg/mana/" + symbol + ".png")
+	
+		session.close()
+		
 def setup(bot):
 	check_folder()
 	check_file()
+	get_mana_symbols()
 	cog = MTG(bot)
 	bot.add_cog(cog)
