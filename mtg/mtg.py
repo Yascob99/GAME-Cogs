@@ -92,7 +92,7 @@ class MTG:
 	async def _mana(self, ctx ,*, mana):
 		"""Creates and outputs the given mana combo"""
 		mana_cost = "{" + "}{".join(mana.split(" ")) + "}"
-		image = await _generate_mana_cost(mana_cost)
+		image = await self._generate_mana_cost(mana_cost)
 		await self.bot.send_file(ctx.message.channel, open(image, "rb"), "")
 		
 		
