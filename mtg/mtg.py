@@ -93,18 +93,16 @@ class MTG:
 		"""Creates and outputs the given mana combo"""
 		mana_symbols = mana.split(" ")
 		symbols = []
-		x = 0
 		for symbol in mana_symbols:
-			mana_symbols[x] = symbol.upper()
-			print (mana_symbols[x])
-			if not (mana_symbols[x] in self.symbols):
-				symbols.append(mana_symbols[x])
-			elif len(mana_symbols[x]) == 2 and mana_symbols[x][::-1] in self.symbols:
-				symbols.append(mana_symbols[x][::-1])
-			x += 1
+			symbol = symbol.upper()
+			print ([symbol])
+			if (symbol in self.symbols):
+				symbols.append(symbol)
+			elif len(symbol) == 2 and symbol[::-1] in self.symbols:
+				symbols.append(symbol[::-1])
 		print (symbols)
 		if len(symbols) != 0:
-			mana_cost = "{" + "}{".join(mana_symbols) + "}"
+			mana_cost = "{" + "}{".join(symbols) + "}"
 			image = await self._generate_mana_cost(mana_cost)
 			if os.path.isfile(generated):
 				await self.bot.send_file(ctx.message.channel, open(image, "rb"))
