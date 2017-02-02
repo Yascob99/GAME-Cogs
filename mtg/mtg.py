@@ -3,13 +3,12 @@ import html
 import discord
 from discord.ext import commands
 from cogs.utils.dataIO import dataIO
-import cStringIO as StringIO
 from mtgsdk import Card
 import difflib
 import sys
 import aiohttp
 from PIL import Image
-import binascii
+from io import BytesIO, StringIO
 
 class MTG:
 	"""Fetch info about a MTG card"""
