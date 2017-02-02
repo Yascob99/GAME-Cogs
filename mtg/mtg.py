@@ -101,6 +101,7 @@ class MTG:
 			elif len(mana_symbols[x]) == 2 and mana_symbols[x][::-1] in self.symbols:
 				symbols.append(mana_symbols[x][::-1])
 			x += 1
+		print (symbols)
 		if len(symbols) != 0:
 			mana_cost = "{" + "}{".join(mana_symbols) + "}"
 			image = await self._generate_mana_cost(mana_cost)
