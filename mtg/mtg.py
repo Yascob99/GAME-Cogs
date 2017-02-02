@@ -42,9 +42,6 @@ class MTG:
 				img.save("mtg/data/mtg/mana/" + symbol + ".png")
 	
 		session.close()
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main(loop))
 		
 	async def _update_sets(self):
 		url = "https://api.magicthegathering.io/v1/sets"
