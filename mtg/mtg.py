@@ -104,7 +104,7 @@ class MTG:
 		if len(symbols) != 0:
 			mana_cost = "{" + "}{".join(symbols) + "}"
 			image = await self._generate_mana_cost(mana_cost)
-			if os.path.isfile(generated):
+			if os.path.isfile(image):
 				await self.bot.send_file(ctx.message.channel, open(image, "rb"))
 			else:
 				self.bot.say("Something went terribly wrong.")
