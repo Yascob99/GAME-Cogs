@@ -113,9 +113,9 @@ class MTG:
 				part = Image.open("data/mtg/mana/" + part + ".png")
 				images.append(part)
 			w = sum(i.size[0] for i in images) + 20 * (len(images) - 1)
-			mh = 600
+			mh = 25
 
-			result = Image.new("RGBA", (w, mh), (255,255,255))
+			result = Image.new("RGBA", (w, mh))
 
 			x = 0
 			for i in images:
