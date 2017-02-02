@@ -219,6 +219,5 @@ def check_file():
 def setup(bot):
 	check_folder()
 	check_file()
-	get_mana_symbols()
 	cog = MTG(bot)
 	bot.add_cog(cog)
