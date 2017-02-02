@@ -16,7 +16,7 @@ class MTG:
 	def __init__(self, bot):
 		self.bot = bot
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
-		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
+		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "100","1000000", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW", "HALFB", "HALFG", "HALFR", "HALFU", "HALFW", "INFINITY"]
 		
 		
 	async def _update_sets(self):
@@ -92,13 +92,24 @@ class MTG:
 	async def _mana(self, ctx ,*, mana):
 		"""Creates and outputs the given mana combo"""
 		mana_symbols = mana.split(" ")
+		symbols = []
 		x = 0
 		for symbol in mana_symbols:
 			mana_symbols[x] = symbol.upper()
-			x += 1	
-		mana_cost = "{" + "}{".join(mana_symbols) + "}"
-		image = await self._generate_mana_cost(mana_cost)
-		await self.bot.send_file(ctx.message.channel, open(image, "rb"))
+			if not (mana_symbols[x] in self.symbols):
+				symbols.append(mana_symbols[x])
+			elif len(mana_symbols[x]) == 2 and mana_symbols[x][::-1] in self.symbols:
+				symbols.append(mana_symbols[x][::-1])
+			x += 1
+		if len(symbols) != 0:
+			mana_cost = "{" + "}{".join(mana_symbols) + "}"
+			image = await self._generate_mana_cost(mana_cost)
+			if os.path.isfile(generated):
+				await self.bot.send_file(ctx.message.channel, open(image, "rb"))
+			else:
+				self.bot.say("Something went terribly wrong.")
+		else:
+			self.bot.say("There were no valid symbols.")
 		
 		
 		
@@ -107,12 +118,11 @@ class MTG:
 		generated = "data/mtg/generated/" + mana_cost + ".png"
 		if not os.path.isfile(generated):
 			cost = mana_cost.replace("{", "").rstrip("}").split("}")
-			print (cost)
 			images = []
 			for part in cost:
 				part = Image.open("data/mtg/mana/" + part + ".png")
 				images.append(part)
-			w = sum(i.size[0] for i in images) + 20 * (len(images) - 1)
+			w = sum(i.size[0] for i in images) + 2 * (len(images) - 1)
 			mh = 25
 
 			result = Image.new("RGBA", (w, mh))
@@ -120,7 +130,7 @@ class MTG:
 			x = 0
 			for i in images:
 				result.paste(i, (x, 0))
-				x += i.size[0] + 20
+				x += i.size[0] + 2
 
 			result.save("data/mtg/generated/" + mana_cost + ".png")
 			
@@ -171,7 +181,7 @@ class MTG:
 		
 	async def _update_mana_symbols(self):
 		payload = {}
-		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
+		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
 		url = "http://gatherer.wizards.com/Handlers/Image.ashx?"
 		conn = aiohttp.TCPConnector(verify_ssl=False)
 		session = aiohttp.ClientSession(connector=conn)
