@@ -193,7 +193,7 @@ def check_file():
 		print('Creating default cards.json...')
 		dataIO.save_json(f, data)
 		
-async def get_mana_symbols(self):
+async def get_mana_symbols():
 		payload = {}
 		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
 		url = "http://gatherer.wizards.com/Handlers/Image.ashx?"
