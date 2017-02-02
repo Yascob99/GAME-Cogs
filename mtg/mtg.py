@@ -16,9 +16,9 @@ class MTG:
 	def __init__(self, bot):
 		self.bot = bot
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
-		await self._get_mana_symbols()
+		self._get_mana_symbols()
 		
-	async def _get_mana_symbols(self):
+	def _get_mana_symbols(self):
 		payload = {}
 		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
 		url = "http://gatherer.wizards.com/Handlers/Image.ashx?"
