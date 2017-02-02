@@ -16,6 +16,7 @@ class MTG:
 	def __init__(self, bot):
 		self.bot = bot
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
+		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
 		
 		
 	async def _update_sets(self):
@@ -62,7 +63,7 @@ class MTG:
 
 
 	@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
-	async def _MTG(self, ctx, *card: str):
+	async def _mtg(self, ctx, *card: str):
 		"""Searches for named MTG Card"""
 		if len(card) > 1:
 			card = '"' + " ".join(card) + '"'
@@ -86,6 +87,16 @@ class MTG:
 		else:
 			message = '`A card called '+ card + ' was not found.`'
 			await self.bot.say(message)
+			
+	@commands.command(pass_context=True, no_pm=False, name='Mana', aliases=['mana'])
+	async def _mana(self, ctx ,*, mana):
+		"""Creates and outputs the given mana combo"""
+		mana_cost = "{" + "}{".join(mana.split(" ")) + "}"
+		image = await _generate_mana_cost(mana_cost)
+		await self.bot.send_file(ctx.message.channel, open(image, "rb"), "")
+		
+		
+		
 
 	async def _generate_mana_cost(self, mana_cost):
 		generated = "data/mtg/generated/" + mana_cost + ".png"
