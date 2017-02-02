@@ -163,14 +163,37 @@ class MTG:
 			match = cards[0]
 			cards = []
 		return match, cards
+		
+	async def _update_mana_symbols(self):
+		payload = {}
+		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
+		url = "http://gatherer.wizards.com/Handlers/Image.ashx?"
+		conn = aiohttp.TCPConnector(verify_ssl=False)
+		session = aiohttp.ClientSession(connector=conn)
+		headers = {'user-agent': 'Red-cog/1.0'}
+		for symbol in list:
+			payload["name"] = symbol
+			payload["type"] = "symbol"
+			payload["size"] = "large"
+			resize = True
+			if "P" in symbol or "C" in symbol:
+				payload["size"] = "medium"
+			async with session.get(url ,params=payload,headers=headers) as r:
+				data = await r.read()
+				print(symbol)
+				stream = BytesIO(data)
+				img = Image.open(stream)
+				img = img.resize((25,25), Image.LANCZOS)
+				img.save("mtg/data/mtg/mana/" + symbol + ".png")
 
 
 	@commands.command(no_pm=True, name='MTGUpdate', aliases=['MTGU', 'mtgu', "MtgU", "Mtgu"])
 	async def _update(self):
-		"""Updates the list of MTG cards"""
+		"""Updates the list of MTG cards, and mana symbols"""
 		try:
 			await self._update_cards()
-			message = 'Card list updated.'
+			await self._update_mana_symbols()
+			message = 'Card list  and mana symbols updated.'
 		except Exception as error:
 			message = 'Could not update. Check console for more information.'
 			print(error)
@@ -203,33 +226,11 @@ def check_file():
 		print('Creating default cards.json...')
 		dataIO.save_json(f, data)
 		
-async def get_mana_symbols():
-		payload = {}
-		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
-		url = "http://gatherer.wizards.com/Handlers/Image.ashx?"
-		conn = aiohttp.TCPConnector(verify_ssl=False)
-		session = aiohttp.ClientSession(connector=conn)
-		headers = {'user-agent': 'Red-cog/1.0'}
-		for symbol in list:
-			payload["name"] = symbol
-			payload["type"] = "symbol"
-			payload["size"] = "large"
-			resize = True
-			if "P" in symbol or "C" in symbol:
-				payload["size"] = "medium"
-			async with session.get(url ,params=payload,headers=headers) as r:
-				data = await r.read()
-				print(symbol)
-				stream = BytesIO(data)
-				img = Image.open(stream)
-				img = img.resize((25,25), Image.LANCZOS)
-				img.save("mtg/data/mtg/mana/" + symbol + ".png")
 	
 		session.close()
 		
 def setup(bot):
 	check_folder()
 	check_file()
-	get_mana_symbols()
 	cog = MTG(bot)
 	bot.add_cog(cog)
