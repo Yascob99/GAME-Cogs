@@ -202,9 +202,10 @@ class MTG:
 		for symbol in list:
 			resize = True
 			async with session.get(url,headers=headers) as r:
-				soup = BeautifulSoup(await r.text(), "html.parser")
+				text = await r.text()
+				soup = BeautifulSoup(text, "html.parser")
 				link = soup.find('div', attrs={'class': "fullImageLink"})
-				print (link)
+				print (text)
 				async with session.get(link, headers=headers) as resp:
 					data = await resp.read()
 					stream = BytesIO(data)
