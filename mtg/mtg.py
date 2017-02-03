@@ -117,7 +117,7 @@ class MTG:
 			self.bot.say("There were no valid symbols.")
 			
 	@mana.command(no_pm=True, name="update")
-	asysnc def update(self):
+	async def update(self):
 		"""Updates Mana images"""
 		await self._update_mana_symbols(self)
 		
