@@ -125,7 +125,7 @@ class MTG:
 	def _resize(self, image, height):
 		w = image.size[0]
 		h = image.size[1]
-		img = img.resize((50,50), Image.LANCZOS)
+		img = img.resize(50,50, Image.LANCZOS)
 	
 	
 
