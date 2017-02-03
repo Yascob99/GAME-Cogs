@@ -1219,16 +1219,16 @@ class Mod:
 		if server.id in self.filter.keys():
 			for w in self.filter[server.id]:
 				if w in message.content.lower():
-					try:
-						print ("Attempting to filter...")
-						await self.bot.edit_message(Message, self.edit_filter(w, message))
-						logger.info("Message edited in server {}."
-									"Filtered: {}"
-									"".format(server.id, w))
-						return True
-					except:
+					#try:
+					print ("Attempting to filter...")
+					await self.bot.edit_message(Message, self.edit_filter(w, message))
+					logger.info("Message edited in server {}."
+								"Filtered: {}"
+								"".format(server.id, w))
+					return True
+					"""except:
 						print ("Something went wrong while trying to filter.")
-						pass
+						pass"""
 		return False
 
 	async def check_duplicates(self, message):
