@@ -201,8 +201,6 @@ class MTG:
 		headers = {'user-agent': 'Red-cog/1.0'}
 		for symbol in list:
 			resize = True
-			if "P" in symbol or "C" in symbol:
-				payload["size"] = "medium"
 			async with session.get(url ,params=payload,headers=headers) as r:
 				soup = BeautifulSoup(await r.text(), "html.parser")
 				link = soup.find('div', attrs={'class': "fullImageLink"}).find("a")["href"]
