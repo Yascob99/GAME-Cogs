@@ -1210,7 +1210,9 @@ class Mod:
 			raise CaseMessageNotFound()
 		
 	def edit_filter(self, w, message):
-		return message.content.replace(w, "*" * randint(2,6))
+		message.content = message.content.replace(w, "*" * randint(2,6))
+		print (message.content)
+		return message.content
 
 	async def check_filter(self, message):
 		server = message.server
@@ -1313,7 +1315,7 @@ class Mod:
 		edited = await self.check_filter(message)
 		if not edited:
 			edited = await self.check_duplicates(message)
-		if not deleted:
+		if not edited:
 			edited = await self.check_mention_spam(message)
 
 	async def on_member_ban(self, member):
