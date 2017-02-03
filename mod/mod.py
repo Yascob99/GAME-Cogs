@@ -1227,6 +1227,7 @@ class Mod:
 									"".format(server.id, w))
 						return True
 					except:
+						print ("Something went wrong while trying to filter.")
 						pass
 		return False
 
