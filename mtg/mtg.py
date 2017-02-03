@@ -9,6 +9,7 @@ import sys
 import aiohttp
 from PIL import Image
 from io import BytesIO, StringIO
+import cairosvg
 try:   # check if BeautifulSoup4 is installed
     from bs4 import BeautifulSoup
     soupAvailable = True
@@ -194,28 +195,46 @@ class MTG:
 		return match, cards
 	
 	async def _update_mana_symbols(self):
-		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "%C2%BD", "%C2%BDR", "%C2%BDW", "Old_W"]
-		url = "http://mtgsalvation.gamepedia.com/File:"
+		Mana = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16","B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S"]
+		Historic = ["100", "1000000", "Y", "Z", "Old_W", "Infinity", "%C2%BD"]
+		Half = ["HB", "HC", "HG", "HR", "HU", "HW"]
+		url = "http://mtgsalvation.gamepedia.com/Category:Mana_symbols"
 		conn = aiohttp.TCPConnector(verify_ssl=False)
 		session = aiohttp.ClientSession(connector=conn)
 		headers = {'user-agent': 'Red-cog/1.0'}
-		for symbol in list:
-			resize = True
+		for symbol in Mana:
+			async with session.get(url,headers=headers) as r:
+				print (symbol)
+				text = await r.text()
+				soup = BeautifulSoup(text, "html.parser")
+				link = soup.find('a', attrs={'href': "/File:" + symbol + ".svg"}).find("img")['src']
+				async with session.get(link, headers=headers) as resp:
+					data = await resp.read()
+					cairosvg.svg2png(bytestring=data, write_to="mtg/data/mtg/mana/" + symbol + ".png")
+		url = "http://mtgsalvation.gamepedia.com/Category:Historical_mana_symbols"
+		for symbol in Historic:
 			async with session.get(url,headers=headers) as r:
 				text = await r.text()
 				soup = BeautifulSoup(text, "html.parser")
-				link = soup.find('div', attrs={'class': 'fullImageLink', 'id' : 'file'})
-				print (link)
+				link = soup.find('a', attrs={'href': "/File:" + symbol + ".svg"}).find("img")['src']
 				async with session.get(link, headers=headers) as resp:
 					data = await resp.read()
-					stream = BytesIO(data)
-					if "%C2%BD" in symbol:
-						symbol = symbol.replace("%C2%BD", "1/2")
-					elif "Old_W" == symbol:
+					if "Old_W" == symbol:
 						symbol = "OW"
-					cairosvg.svg2png(bytestring=stream, write_to="data/mtg/mana/" + symbol + ".png")
-				
-			session.close()
+					elif "%C2%BD" in symbol:
+						symbol = symbol.replace("%C2%BD", "H")
+					print(symbol)
+					cairosvg.svg2png(bytestring=data, write_to="mtg/data/mtg/mana/" + symbol + ".png")
+		session.close()
+		for symbol in Half:
+			orig = symbol.replace("H", "")
+			print (symbol)
+			img = Image.open("mtg/data/mtg/mana/" + orig + ".png")
+			box = (300, 0, 600, 600)
+			half = img.crop(box)
+			result = Image.new("RGBA", (600, 600))
+			result.paste(half, box)
+			result.save("mtg/data/mtg/mana/" + symbol + ".png")
 		print ("Updated Mana")
 
 
