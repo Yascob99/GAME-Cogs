@@ -208,6 +208,7 @@ class MTG:
 				text = await r.text()
 				soup = BeautifulSoup(text, "html.parser")
 				link = soup.find('a', attrs={'href': "/File:" + symbol + ".svg"}).find("img")['src']
+				print (link)
 				async with session.get(link, headers=headers) as resp:
 					data = await resp.read()
 					cairosvg.svg2png(bytestring=data, write_to="mtg/data/mtg/mana/" + symbol + ".png")
