@@ -261,15 +261,12 @@ def check_file():
 	if not dataIO.is_valid_json(f):
 		print('Creating default cards.json...')
 		dataIO.save_json(f, data)
-	
-
-		session.close()
 		
 def setup(bot):
 	if not soupAvailable:
 		raise RuntimeError("You need to run \'pip3 install beautifulsoup4\' in command prompt.")
 	else:
 		check_folder()
-		check_file()
+		#check_file()
 		cog = MTG(bot)
 		bot.add_cog(cog)
