@@ -204,8 +204,8 @@ class MTG:
 			async with session.get(url,headers=headers) as r:
 				text = await r.text()
 				soup = BeautifulSoup(text, "html.parser")
-				link = soup.find('div', attrs={'class': "fullImageLink"})
-				print (text)
+				link = soup.find('div', attrs={'class': 'fullImageLink', 'id' : 'file'})
+				print (link)
 				async with session.get(link, headers=headers) as resp:
 					data = await resp.read()
 					stream = BytesIO(data)
