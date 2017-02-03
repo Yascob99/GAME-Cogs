@@ -1225,7 +1225,7 @@ class Mod:
 						logger.info("Message edited in server {}."
 									"Filtered: {}"
 									"".format(server.id, w))
-					return True
+						return True
 					except:
 						print ("Something went wrong while trying to filter.")
 						pass
