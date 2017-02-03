@@ -119,7 +119,7 @@ class MTG:
 	@mana.command(no_pm=True, name="update")
 	asysnc def update(self):
 		"""Updates Mana images"""
-		self._update_mana_symbols(self)
+		await self._update_mana_symbols(self)
 		
 	def _resize(self, image, height):
 		w = image.size[0]
