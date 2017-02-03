@@ -100,12 +100,12 @@ class MTG:
 		symbols = []
 		for symbol in mana_symbols:
 			symbol = symbol.upper()
-			print ([symbol])
 			if (symbol in self.symbols):
 				symbols.append(symbol)
 			elif len(symbol) == 2 and symbol[::-1] in self.symbols:
 				symbols.append(symbol[::-1])
-		print (symbols)
+			else:
+				await self.update_mana()
 		if len(symbols) != 0:
 			mana_cost = "{" + "}{".join(symbols) + "}"
 			image = await self._generate_mana_cost(mana_cost)
@@ -116,9 +116,9 @@ class MTG:
 		else:
 			self.bot.say("There were no valid symbols.")
 		
-	@mana.command(no_pm=True, name="update")
-	async def update(self):
+	async def update_mana(self):
 		"""Updates Mana images"""
+		print("Updating Mana")
 		await self._update_mana_symbols(self)
 	
 	def _resize(self, image, height):
@@ -216,6 +216,7 @@ class MTG:
 					cairosvg.svg2png(bytestring=stream, write_to="data/mtg/mana/" + symbol + ".png")
 				
 			session.close()
+		print ("Updated Mana")
 
 
 	@commands.command(no_pm=True, name='MTGUpdate', aliases=['MTGU', 'mtgu', "MtgU", "Mtgu"])
