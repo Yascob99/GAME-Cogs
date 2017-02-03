@@ -1209,24 +1209,24 @@ class Mod:
         else:
             raise CaseMessageNotFound()
             
-    def edit_filter(self, w, message):
-    	return message.content.replace(w, "*" * randint(2,6))
+	def edit_filter(self, w, message):
+		return message.content.replace(w, "*" * randint(2,6))
 
-    async def check_filter(self, message):
-        server = message.server
-        if server.id in self.filter.keys():
-            for w in self.filter[server.id]:
-                if w in message.content.lower():
-                    try:
-                    	print ("attempting to filter...")
-                        await self.bot.edit_message(Message, self.edit_filter(w, message))
-                        logger.info("Message edited in server {}."
-                                    "Filtered: {}"
-                                    "".format(server.id, w))
-                        return True
-                    except:
-                        pass
-        return False
+	async def check_filter(self, message):
+		server = message.server
+		if server.id in self.filter.keys():
+			for w in self.filter[server.id]:
+				if w in message.content.lower():
+					try:
+						print ("Attempting to filter...")
+						await self.bot.edit_message(Message, self.edit_filter(w, message))
+						logger.info("Message edited in server {}."
+									"Filtered: {}"
+									"".format(server.id, w))
+						return True
+					except:
+						pass
+		return False
 
     async def check_duplicates(self, message):
         server = message.server
@@ -1303,25 +1303,25 @@ class Mod:
         await asyncio.sleep(delay)
         await _delete_helper(self.bot, message)
 
-    async def on_message(self, message):
-    	print (message.content)
-        if message.channel.is_private or self.bot.user == message.author \
-         or not isinstance(message.author, discord.Member):
-            return
-        elif self.is_mod_or_superior(message):
-            return
-        edited = await self.check_filter(message)
-        if not edited:
-            edited = await self.check_duplicates(message)
-        if not deleted:
-            edited = await self.check_mention_spam(message)
+	async def on_message(self, message):
+		print (message.content)
+		if message.channel.is_private or self.bot.user == message.author \
+		 or not isinstance(message.author, discord.Member):
+			return
+		elif self.is_mod_or_superior(message):
+			return
+		edited = await self.check_filter(message)
+		if not edited:
+			edited = await self.check_duplicates(message)
+		if not deleted:
+			edited = await self.check_mention_spam(message)
 
-    async def on_member_ban(self, member):
-        if member not in self._tmp_banned_cache:
-            server = member.server
-            await self.new_case(server,
-                                user=member,
-                                action="Ban \N{HAMMER}")
+	async def on_member_ban(self, member):
+		if member not in self._tmp_banned_cache:
+			server = member.server
+			await self.new_case(server,
+								user=member,
+								action="Ban \N{HAMMER}")
 
     async def check_names(self, before, after):
         if before.name != after.name:
