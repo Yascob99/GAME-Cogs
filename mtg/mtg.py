@@ -125,7 +125,9 @@ class MTG:
 	def _resize(self, image, height):
 		w = image.size[0]
 		h = image.size[1]
-		img = img.resize(50,50, Image.LANCZOS)
+		width = w/(h/height)
+		img = img.resize((width, height), Image.LANCZOS)
+		return img
 	
 	
 
@@ -135,7 +137,7 @@ class MTG:
 			cost = mana_cost.replace("{", "").rstrip("}").split("}")
 			images = []
 			for part in cost:
-				part = self._resize(Image.open("data/mtg/mana/" + part + ".png"))
+				part = self._resize(Image.open("data/mtg/mana/" + part + ".png"), 50)
 				images.append(part)
 			w = sum(i.size[0] for i in images) + 5 * (len(images) - 1)
 			mh = 75
