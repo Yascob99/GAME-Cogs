@@ -22,8 +22,8 @@ class MTG:
 		self.bot = bot
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
 		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "1/2", "1/2R", "1/2W", "OW"]
-		
-		
+	
+	
 	async def _update_sets(self):
 		url = "https://api.magicthegathering.io/v1/sets"
 		conn = aiohttp.TCPConnector(verify_ssl=False)
@@ -37,7 +37,7 @@ class MTG:
 		session.close()
 		for set in data:
 			set.append(set['code'])
-		
+	
 
 	async def _update_cards(self):
 		payload = {}
@@ -92,7 +92,7 @@ class MTG:
 		else:
 			message = '`A card called '+ card + ' was not found.`'
 			await self.bot.say(message)
-	
+
 	@commands.group(pass_context=True, no_pm=False, name='Mana', aliases=['mana'])	
 	async def mana(self, ctx ,*, mana):
 		"""Creates and outputs the given mana combo"""
@@ -115,18 +115,18 @@ class MTG:
 				self.bot.say("Something went terribly wrong.")
 		else:
 			self.bot.say("There were no valid symbols.")
-			
+		
 	@mana.command(no_pm=True, name="update")
 	async def update(self):
 		"""Updates Mana images"""
 		await self._update_mana_symbols(self)
-		
+	
 	def _resize(self, image, height):
 		w = image.size[0]
 		h = image.size[1]
 		img = img.resize((50,50), Image.LANCZOS)
-		
-		
+	
+	
 
 	async def _generate_mana_cost(self, mana_cost):
 		generated = "data/mtg/generated/" + mana_cost + ".png"
@@ -147,9 +147,9 @@ class MTG:
 				x += i.size[0] + 5
 
 			result.save("data/mtg/generated/" + mana_cost + ".png")
-			
-		return generated
 		
+		return generated
+	
 	async def _generate_set_symbols(self, sets):
 		generated = "data/mtg/generated/" + "_".join(sets) + ".png"
 		if not os.path.isfile(generated):
@@ -172,7 +172,7 @@ class MTG:
 
 				new_im.save("data/mtg/generated/" + "_".join(sets) + ".png")
 			return generated
-			
+		
 	async def _card_search(self, query):
 		cards = []
 		match = False
@@ -192,7 +192,7 @@ class MTG:
 			match = cards[0]
 			cards = []
 		return match, cards
-		
+	
 	async def _update_mana_symbols(self):
 		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "%C2%BD", "%C2%BDR", "%C2%BDW", "Old_W"]
 		url = "http://mtgsalvation.gamepedia.com/File:"
@@ -214,7 +214,7 @@ class MTG:
 					elif "Old_W" == symbol:
 						symbol = "OW"
 					cairosvg.svg2png(bytestring=stream, write_to="data/mtg/mana/" + symbol + ".png")
-					
+				
 			session.close()
 
 
@@ -229,7 +229,7 @@ class MTG:
 			message = 'Could not update. Check console for more information.'
 			print(error)
 		await self.bot.say(message)
-	
+
 	async def _robust_edit(self, msg, text):
 		try:
 			msg = await self.bot.edit_message(msg, text)
@@ -256,14 +256,14 @@ def check_file():
 	if not dataIO.is_valid_json(f):
 		print('Creating default cards.json...')
 		dataIO.save_json(f, data)
-		
 	
+
 		session.close()
 		
 def setup(bot):
 	if not soupAvailable:
-        raise RuntimeError("You need to run \'pip3 install beautifulsoup4\' in command prompt.")
-    else:
+		raise RuntimeError("You need to run \'pip3 install beautifulsoup4\' in command prompt.")
+	else:
 		check_folder()
 		check_file()
 		cog = MTG(bot)
