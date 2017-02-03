@@ -1209,26 +1209,26 @@ class Mod:
 		else:
 			raise CaseMessageNotFound()
 		
-	def edit_filter(self, w, message):
+	"""def edit_filter(self, w, message):
 		message.content = message.content.replace(w, "*" * randint(2,6))
 		print (message.content)
-		return str(message)
+		return str(message)"""
 
 	async def check_filter(self, message):
 		server = message.server
 		if server.id in self.filter.keys():
 			for w in self.filter[server.id]:
 				if w in message.content.lower():
-					#try:
-					print ("Attempting to filter...")
-					await self.bot.edit_message(message, self.edit_filter(w, message))
-					logger.info("Message edited in server {}."
-								"Filtered: {}"
-								"".format(server.id, w))
+					try:
+						print ("Attempting to filter...")
+						await self.bot.delete_message(message)
+						logger.info("Message edited in server {}."
+									"Filtered: {}"
+									"".format(server.id, w))
 					return True
-					"""except:
+					except:
 						print ("Something went wrong while trying to filter.")
-						pass"""
+						pass
 		return False
 
 	async def check_duplicates(self, message):
@@ -1313,11 +1313,11 @@ class Mod:
 			return
 		elif self.is_mod_or_superior(message):
 			return
-		edited = await self.check_filter(message)
+		deleted = await self.check_filter(message)
 		if not edited:
-			edited = await self.check_duplicates(message)
+			deleted = await self.check_duplicates(message)
 		if not edited:
-			edited = await self.check_mention_spam(message)
+			deleted = await self.check_mention_spam(message)
 
 	async def on_member_ban(self, member):
 		if member not in self._tmp_banned_cache:

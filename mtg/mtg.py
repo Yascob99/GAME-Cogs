@@ -9,6 +9,11 @@ import sys
 import aiohttp
 from PIL import Image
 from io import BytesIO, StringIO
+try:   # check if BeautifulSoup4 is installed
+    from bs4 import BeautifulSoup
+    soupAvailable = True
+except ImportError:
+    soupAvailable = False
 
 class MTG:
 	"""Fetch info about a MTG card"""
@@ -16,7 +21,7 @@ class MTG:
 	def __init__(self, bot):
 		self.bot = bot
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
-		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "100","1000000", "B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW", "HALFB", "HALFG", "HALFR", "HALFU", "HALFW", "INFINITY"]
+		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "1/2", "1/2R", "1/2W", "OW"]
 		
 		
 	async def _update_sets(self):
@@ -87,9 +92,9 @@ class MTG:
 		else:
 			message = '`A card called '+ card + ' was not found.`'
 			await self.bot.say(message)
-			
-	@commands.command(pass_context=True, no_pm=False, name='Mana', aliases=['mana'])
-	async def _mana(self, ctx ,*, mana):
+	
+	@commands.group(pass_context=True, no_pm=False, name='Mana', aliases=['mana'])	
+	async def mana(self, ctx ,*, mana):
 		"""Creates and outputs the given mana combo"""
 		mana_symbols = mana.split(" ")
 		symbols = []
@@ -110,11 +115,16 @@ class MTG:
 				self.bot.say("Something went terribly wrong.")
 		else:
 			self.bot.say("There were no valid symbols.")
+			
+	@mana.command(no_pm=True, name="update")
+	asysnc def update(self):
+		"""Updates Mana images"""
+		self._update_mana_symbols(self)
 		
 	def _resize(self, image, height):
 		w = image.size[0]
 		h = image.size[1]
-		image.resize
+		img = img.resize((50,50), Image.LANCZOS)
 		
 		
 
@@ -184,26 +194,28 @@ class MTG:
 		return match, cards
 		
 	async def _update_mana_symbols(self):
-		payload = {}
-		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "SNOW"]
-		url = "http://gatherer.wizards.com/Handlers/Image.ashx?"
+		list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "%C2%BD", "%C2%BDR", "%C2%BDW", "Old_W"]
+		url = "http://mtgsalvation.gamepedia.com/File:"
 		conn = aiohttp.TCPConnector(verify_ssl=False)
 		session = aiohttp.ClientSession(connector=conn)
 		headers = {'user-agent': 'Red-cog/1.0'}
 		for symbol in list:
-			payload["name"] = symbol
-			payload["type"] = "symbol"
-			payload["size"] = "large"
 			resize = True
 			if "P" in symbol or "C" in symbol:
 				payload["size"] = "medium"
 			async with session.get(url ,params=payload,headers=headers) as r:
-				data = await r.read()
-				print(symbol)
-				stream = BytesIO(data)
-				img = Image.open(stream)
-				img = img.resize((25,25), Image.LANCZOS)
-				img.save("mtg/data/mtg/mana/" + symbol + ".png")
+				soup = BeautifulSoup(await r.text(), "html.parser")
+				link = soup.find('div', attrs={'class': "fullImageLink"}).find("a")["href"]
+				async with session.get(link, headers=headers) as resp:
+					data = await resp.read()
+					stream = BytesIO(data)
+					if "%C2%BD" in symbol:
+						symbol = symbol.replace("%C2%BD", "1/2")
+					elif "Old_W" == symbol:
+						symbol = "OW"
+					cairosvg.svg2png(bytestring=stream, write_to="data/mtg/mana/" + symbol + ".png")
+					
+			session.close()
 
 
 	@commands.command(no_pm=True, name='MTGUpdate', aliases=['MTGU', 'mtgu', "MtgU", "Mtgu"])
@@ -249,7 +261,10 @@ def check_file():
 		session.close()
 		
 def setup(bot):
-	check_folder()
-	check_file()
-	cog = MTG(bot)
-	bot.add_cog(cog)
+	if not soupAvailable:
+        raise RuntimeError("You need to run \'pip3 install beautifulsoup4\' in command prompt.")
+    else:
+		check_folder()
+		check_file()
+		cog = MTG(bot)
+		bot.add_cog(cog)
