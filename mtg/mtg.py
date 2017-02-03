@@ -21,7 +21,7 @@ class MTG:
 	def __init__(self, bot):
 		self.bot = bot
 		self.cards = {}
-		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "1/2", "1/2R", "1/2W", "OW", "HB", "HG", "HR", "HU", "HW"]
+		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16","B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "100", "1000000", "Y", "Z", "OW", "Infinity", "H", "HB", "HC", "HG", "HR", "HU", "HW"]
 		
 	@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
 	async def mtg(self, ctx, *card: str):
@@ -178,7 +178,7 @@ class MTG:
 			cards = []
 		return match, cards
 	
-	async def _update_mana_symbols(self):
+	"""async def _update_mana_symbols(self):
 		Mana = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16","B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S"]
 		Historic = ["100", "1000000", "Y", "Z", "Old_W", "Infinity", "%C2%BD"]
 		Half = ["HB", "HC", "HG", "HR", "HU", "HW"]
@@ -220,8 +220,17 @@ class MTG:
 			result = Image.new("RGBA", (600, 600))
 			result.paste(half, box)
 			result.save("mtg/data/mtg/mana/" + symbol + ".png")
-		print ("Updated Mana")
-
+		print ("Updated Mana")"""
+	
+	async def _update_mana_symbols(self):
+		Mana = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16","B", "C", "G", "R", "U", "W", "X", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "100", "1000000", "Y", "Z", "OW", "Infinity", "H", "HB", "HC", "HG", "HR", "HU", "HW"]
+		url = "https://raw.githubusercontent.com/Yascob99/GAME-Cogs/master/mtg/data/mtg/mana/"
+		conn = aiohttp.TCPConnector(verify_ssl=False)
+		session = aiohttp.ClientSession(connector=conn)
+		headers = {'user-agent': 'Red-cog/1.0'}
+		for symbol in Mana:
+			async with session.get(url,headers=headers) as r:
+				Images.open(BytesIO.())
 
 	@commands.command(no_pm=True, name='MTGUpdate', aliases=['MTGU', 'mtgu', "MtgU", "Mtgu"])
 	async def _update(self):
