@@ -1212,7 +1212,7 @@ class Mod:
 	def edit_filter(self, w, message):
 		message.content = message.content.replace(w, "*" * randint(2,6))
 		print (message.content)
-		return message.content
+		return str(message)
 
 	async def check_filter(self, message):
 		server = message.server
