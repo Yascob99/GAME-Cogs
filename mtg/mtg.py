@@ -1,5 +1,4 @@
 import os
-import html
 import discord
 from discord.ext import commands
 from cogs.utils.dataIO import dataIO
@@ -22,7 +21,7 @@ class MTG:
 	def __init__(self, bot):
 		self.bot = bot
 		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
-		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "1/2", "1/2R", "1/2W", "OW"]
+		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "1/2", "1/2R", "1/2W", "OW", "HB", "HG", "HR", "HU", "HW"]
 	
 	
 	async def _update_sets(self):
@@ -105,7 +104,7 @@ class MTG:
 				symbols.append(symbol)
 			elif len(symbol) == 2 and symbol[::-1] in self.symbols:
 				symbols.append(symbol[::-1])
-			else:
+			elif mana == update:
 				await self.update_mana()
 		if len(symbols) != 0:
 			mana_cost = "{" + "}{".join(symbols) + "}"
