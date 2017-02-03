@@ -1209,7 +1209,7 @@ class Mod:
         else:
             raise CaseMessageNotFound()
             
-    aysync def edit_filter(self, w, message):
+    def edit_filter(self, w, message):
     	return message.content.replace(w, "*" * randint(2,6))
 
     async def check_filter(self, message):
@@ -1218,7 +1218,7 @@ class Mod:
             for w in self.filter[server.id]:
                 if w in message.content.lower():
                     try:
-                        await self.bot.edit_message(Message, await self.edit_filter(w, message))
+                        await self.bot.edit_message(Message, self.edit_filter(w, message))
                         logger.info("Message edited in server {}."
                                     "Filtered: {}"
                                     "".format(server.id, w))
