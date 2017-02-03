@@ -24,7 +24,7 @@ class MTG:
 		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "1/2", "1/2R", "1/2W", "OW", "HB", "HG", "HR", "HU", "HW"]
 		
 		@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
-	async def _mtg(self, ctx, *card: str):
+	async def mtg(self, ctx, *card: str):
 		"""Searches for named MTG Card"""
 		if len(card) > 1:
 			card = '"' + " ".join(card) + '"'
@@ -87,8 +87,8 @@ class MTG:
 				symbols.append(symbol)
 			elif len(symbol) == 2 and symbol[::-1] in self.symbols:
 				symbols.append(symbol[::-1])
-			elif mana == update:
-				await self.update_mana()
+		if mana_symbols[0] == "update":
+			await self.update_mana()
 		if len(symbols) != 0:
 			mana_cost = "{" + "}{".join(symbols) + "}"
 			image = await self._generate_mana_cost(mana_cost)
