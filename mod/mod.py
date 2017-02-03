@@ -1218,6 +1218,7 @@ class Mod:
             for w in self.filter[server.id]:
                 if w in message.content.lower():
                     try:
+                    	print ("attempting to filter...")
                         await self.bot.edit_message(Message, self.edit_filter(w, message))
                         logger.info("Message edited in server {}."
                                     "Filtered: {}"
@@ -1303,16 +1304,17 @@ class Mod:
         await _delete_helper(self.bot, message)
 
     async def on_message(self, message):
+    	print (message.content)
         if message.channel.is_private or self.bot.user == message.author \
          or not isinstance(message.author, discord.Member):
             return
         elif self.is_mod_or_superior(message):
             return
-        deleted = await self.check_filter(message)
+        edited = await self.check_filter(message)
+        if not edited:
+            edited = await self.check_duplicates(message)
         if not deleted:
-            deleted = await self.check_duplicates(message)
-        if not deleted:
-            deleted = await self.check_mention_spam(message)
+            edited = await self.check_mention_spam(message)
 
     async def on_member_ban(self, member):
         if member not in self._tmp_banned_cache:
