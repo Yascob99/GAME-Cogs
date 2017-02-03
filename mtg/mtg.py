@@ -119,7 +119,7 @@ class MTG:
 	async def update_mana(self):
 		"""Updates Mana images"""
 		print("Updating Mana")
-		await self._update_mana_symbols(self)
+		await self._update_mana_symbols()
 	
 	def _resize(self, image, height):
 		w = image.size[0]
