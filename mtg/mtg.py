@@ -203,7 +203,8 @@ class MTG:
 			resize = True
 			async with session.get(url,headers=headers) as r:
 				soup = BeautifulSoup(await r.text(), "html.parser")
-				link = soup.find('div', attrs={'class': "fullImageLink"}).find("a")["href"]
+				link = soup.find('div', attrs={'class': "fullImageLink"})
+				print (link)
 				async with session.get(link, headers=headers) as resp:
 					data = await resp.read()
 					stream = BytesIO(data)
