@@ -20,24 +20,34 @@ class MTG:
 
 	def __init__(self, bot):
 		self.bot = bot
-		self.cards = dataIO.load_json('data/mtg/cards.json')['cards']
+		self.cards = {}
 		self.symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "1000000","B", "C", "G", "R", "U", "W", "X", "Y", "Z", "BP", "GP", "RP", "UP", "WP", "BG", "BR", "UB", "WB", "RG", "GU", "GW", "UR", "RW", "WU", "S", "1/2", "1/2R", "1/2W", "OW", "HB", "HG", "HR", "HU", "HW"]
-	
-	
-	async def _update_sets(self):
-		url = "https://api.magicthegathering.io/v1/sets"
-		conn = aiohttp.TCPConnector(verify_ssl=False)
-		session = aiohttp.ClientSession(connector=conn)
-		headers = {'user-agent': 'Red-cog/1.0'}
-		data = {'sets':[]}
-		base_msg = "Downloading updated sets data, please wait...\n"
-		async with session.get(url ,headers=headers) as r:
-			data = await r.json()
-		sets = []
-		session.close()
-		for set in data:
-			set.append(set['code'])
-	
+		
+		@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
+	async def _mtg(self, ctx, *card: str):
+		"""Searches for named MTG Card"""
+		if len(card) > 1:
+			card = '"' + " ".join(card) + '"'
+		else:
+			card = card[0]
+		card_match = await self._card_search(card)
+		match = card_match[0]
+		cards = card_match[1]
+		if match:
+			em = discord.Embed(title='{}'.format(match['name']), color=discord.Color.blue())
+			em.set_image(url=match['imageUrl'])
+			#em.set_thumbnail(url= await self._generate_mana_cost(match['manaCost']))
+			#em.set_footer(icon_url= await self._generate_set_symbols(match['sets']))
+			await self.bot.say(embed=em)
+		elif cards:
+			message = '```A card called '+ card + ' was not found. But I found close matches:\n\n'
+			for card in cards:
+				message += '{}\n'.format(card['name'])
+			message += '```'
+			await self.bot.say(message)
+		else:
+			message = '`A card called '+ card + ' was not found.`'
+			await self.bot.say(message)
 
 	async def _update_cards(self):
 		payload = {}
@@ -65,33 +75,6 @@ class MTG:
 		session.close()
 		self.cards = data
 		dataIO.save_json('data/steam/cards.json', data)
-
-
-	@commands.command(pass_context=True, no_pm=False, name='MTG', aliases=['mtg', 'Mtg'])
-	async def _mtg(self, ctx, *card: str):
-		"""Searches for named MTG Card"""
-		if len(card) > 1:
-			card = '"' + " ".join(card) + '"'
-		else:
-			card = card[0]
-		card_match = await self._card_search(card)
-		match = card_match[0]
-		cards = card_match[1]
-		if match:
-			em = discord.Embed(title='{}'.format(match['name']), color=discord.Color.blue())
-			em.set_image(url=match['imageUrl'])
-			#em.set_thumbnail(url= await self._generate_mana_cost(match['manaCost']))
-			#em.set_footer(icon_url= await self._generate_set_symbols(match['sets']))
-			await self.bot.say(embed=em)
-		elif cards:
-			message = '```A card called '+ card + ' was not found. But I found close matches:\n\n'
-			for card in cards:
-				message += '{}\n'.format(card['name'])
-			message += '```'
-			await self.bot.say(message)
-		else:
-			message = '`A card called '+ card + ' was not found.`'
-			await self.bot.say(message)
 
 	@commands.group(pass_context=True, no_pm=False, name='Mana', aliases=['mana'])	
 	async def mana(self, ctx ,*, mana):
