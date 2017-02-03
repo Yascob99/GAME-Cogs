@@ -201,7 +201,7 @@ class MTG:
 		headers = {'user-agent': 'Red-cog/1.0'}
 		for symbol in list:
 			resize = True
-			async with session.get(url ,params=payload,headers=headers) as r:
+			async with session.get(url,headers=headers) as r:
 				soup = BeautifulSoup(await r.text(), "html.parser")
 				link = soup.find('div', attrs={'class': "fullImageLink"}).find("a")["href"]
 				async with session.get(link, headers=headers) as resp:
