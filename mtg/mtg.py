@@ -111,6 +111,10 @@ class MTG:
 		else:
 			self.bot.say("There were no valid symbols.")
 		
+	def _resize(self, image, height):
+		w = image.size[0]
+		h = image.size[1]
+		image.resize
 		
 		
 
@@ -120,9 +124,9 @@ class MTG:
 			cost = mana_cost.replace("{", "").rstrip("}").split("}")
 			images = []
 			for part in cost:
-				part = Image.open("data/mtg/mana/" + part + ".png")
+				part = self._resize(Image.open("data/mtg/mana/" + part + ".png"))
 				images.append(part)
-			w = sum(i.size[0] for i in images) + 2 * (len(images) - 1)
+			w = sum(i.size[0] for i in images) + 5 * (len(images) - 1)
 			mh = 75
 
 			result = Image.new("RGBA", (w, mh))
@@ -130,7 +134,7 @@ class MTG:
 			x = 0
 			for i in images:
 				result.paste(i, (x, 0))
-				x += i.size[0] + 2
+				x += i.size[0] + 5
 
 			result.save("data/mtg/generated/" + mana_cost + ".png")
 			
