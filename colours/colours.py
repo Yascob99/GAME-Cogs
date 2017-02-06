@@ -29,10 +29,12 @@ class Colours:
 			self.bot.say("Invalid hex colour, please make it a '#' followed by six hexidecimal characters.")
 			return
 		else:
+			print ("here")
 			member = ctx.message.author
 			added = False
 			for role in server.roles:
 				if role == hex:
+					print (role.id)
 					for role in member.roles:
 						if "#" == role.id[0]:
 							self.bot.remove_roles(member, role)
