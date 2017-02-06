@@ -31,6 +31,7 @@ class Colours:
 		else:
 			print ("here")
 			member = ctx.message.author
+			print (member.name)
 			added = False
 			for role in server.roles:
 				if role == hex:
