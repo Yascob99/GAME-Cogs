@@ -14,7 +14,7 @@ class Colours:
 	async def colour(self, ctx, *hex: str):
 		"""Set's your colour to a hexcode"""
 		server = ctx.message.server
-		hex = hex.rstrip(" ").lstrip(" ")
+		hex = hex[0].rstrip(" ").lstrip(" ")
 		roles = []
 		for member in server.members:
 			for r in member.roles:
