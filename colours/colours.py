@@ -15,6 +15,7 @@ class Colours:
 		"""Set's your colour to a hexcode"""
 		server = ctx.message.server
 		hex = hex[0].rstrip(" ").lstrip(" ")
+		print (hex)
 		roles = []
 		for member in server.members:
 			for r in member.roles:
