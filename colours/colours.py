@@ -42,7 +42,7 @@ class Colours:
 					self.bot.remove_roles(member, role)
 			new_role = self.bot.create_role(server, name = hex, colour = discord.Colour(hex.replace("#", "0x")) )
 			self.bot.add_roles(member, new_role)
-			self.bot.move_role(server, new_role, len(server.roles)-3))			
+			self.bot.move_role(server, new_role, 4)			
 		
 def setup(bot):
 		cog = Colours(bot)
