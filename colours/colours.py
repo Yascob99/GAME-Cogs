@@ -22,8 +22,8 @@ class Colours:
 				if r.id not in roles:
 					roles.append(r)
 		for rol in server.roles:
-			if "#" == rol.id[0]:
-				if rol not in roles:
+			if "#" == rol.name[0]:
+				if rol.id not in roles:
 					self.bot.delete_role(server, rol)
 		if hex[0] != "#":
 			self.bot.say("Invalid hex colour, please make it a '#' followed by six hexidecimal characters.")
@@ -34,18 +34,17 @@ class Colours:
 			print (member.name)
 			added = False
 			for role in server.roles:
-				if role == hex:
-					print (role.id)
+				if role.name == hex:
+					print (role.name)
 					for role in member.roles:
-						if "#" == role.id[0]:
+						if "#" == role.name[0]:
 							self.bot.remove_roles(member, role)
 					self.bot.add_roles(member, role)
 					return
 			for role in member.roles:
-				if "#" == role.id[0]:
+				if "#" == role.name[0]:
 					self.bot.remove_roles(member, role)
-			new_role = self.bot.create_role(server, name = hex, colour = discord.Colour(hex.replace("#", "0x")) )
-			print (new_role.name)
+			new_role = self.bot.create_role(server, name=hex, colour=discord.Colour(hex.replace("#", "0x")))
 			self.bot.add_roles(member, new_role)
 			self.bot.move_role(server, new_role, 4)			
 		
