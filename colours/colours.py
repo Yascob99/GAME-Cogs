@@ -44,8 +44,10 @@ class Colours:
 			for role in member.roles:
 				if "#" == role.id[0]:
 					self.bot.remove_roles(member, role)
-			new_role = self.bot.create_role(server, name = hex, colour = discord.Colour(hex.replace("#", "0x")) )
-			print (new_role)
+			self.bot.create_role(server, name = hex, colour = discord.Colour(hex.replace("#", "0x")) )
+			for rol in server.roles:
+				if rol.id == hex:
+					new_role = rol
 			self.bot.add_roles(member, new_role)
 			self.bot.move_role(server, new_role, 4)			
 		
